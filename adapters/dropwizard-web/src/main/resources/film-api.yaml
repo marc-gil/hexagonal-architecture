@@ -1,0 +1,199 @@
+openapi: 3.0.3
+info:
+  title: Film Swagger
+  description: |-
+    This is a sample Film Server based on the OpenAPI 3.0 specification.
+  version: 1.0.0
+tags:
+  - name: Film
+    description: Everything about films
+  - name: Director
+    description: Find out about directors
+paths:
+  /films:
+    get:
+      tags:
+        - Film
+      summary: Get films
+      description: Get all films based on the specified criteria
+      operationId: getFilms
+      parameters:
+        - name: directorId
+          in: query
+          description: ID of director of films to be returned
+          required: false
+          schema:
+            type: string
+        - name: genre
+          in: query
+          description: Genre of the films to be returned
+          required: false
+          schema:
+            type: string
+        - name: year
+          in: query
+          description: Year of recording of the films to be returned
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+        '400':
+          description: Invalid directorId supplied
+        '404':
+          description: Director not found
+    post:
+      tags:
+        - Film
+      summary: Add a new film
+      description: Create a new film
+      operationId: createFilm
+      requestBody:
+        description: Create a new film
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Film'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+        '400':
+          description: Invalid directorId supplied
+        '404':
+          description: Director not found
+  /directors:
+    get:
+      tags:
+        - Director
+      summary: Find directors by name
+      description: Get all directors by name
+      operationId: getAllDirectorsByName
+      parameters:
+        - name: name
+          in: query
+          description: Name of directors to be found
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Director'
+        '400':
+          description: Invalid director name supplied
+    post:
+      tags:
+        - Director
+      summary: Add a new director
+      description: Create a new director
+      operationId: createDirector
+      requestBody:
+        description: Create a new director
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDirectorRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Director'
+        '400':
+          description: Invalid director name supplied
+  /directors/{directorId}/films:
+    get:
+      tags:
+        - Director
+      summary: Get all films from the specified director
+      description: Get all films by directorId
+      operationId: getDirectorsFilms
+      parameters:
+        - name: directorId
+          in: path
+          description: ID of director to return the films
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+        '400':
+          description: Invalid directorId supplied
+        '404':
+          description: Director not found
+
+components:
+  schemas:
+    Film:
+      type: object
+      properties:
+        directorId:
+          type: string
+        year:
+          type: integer
+          format: int32
+        title:
+          type: string
+        duration:
+          type: string
+          format: duration
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+        cast:
+          type: array
+          items:
+            type: string
+    Genre:
+      type: string
+      enum:
+        - DRAMA
+        - COMEDY
+        - THRILLER
+        - ROMANCE
+        - ANIME
+        - ACTION
+    Director:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        birthDate:
+          type: string
+          format: date
+    CreateDirectorRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        birthDate:
+          type: string
+          format: date

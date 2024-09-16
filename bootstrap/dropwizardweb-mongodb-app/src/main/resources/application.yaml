@@ -1,0 +1,2 @@
+mongodb.uri: "mongodb://root:example@localhost:27017/hexagonal-architecture?authSource=admin"
+mongodb.db: "hexagonal-architecture"

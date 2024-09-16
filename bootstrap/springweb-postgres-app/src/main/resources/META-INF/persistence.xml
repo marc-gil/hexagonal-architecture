@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+  version="3.0">
+
+  <persistence-unit name="dev.marcgil.hexagon.film" transaction-type="RESOURCE_LOCAL">
+    <!-- Provider -->
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+    <!-- JPA entity classes -->
+    <class>dev.marcgil.hexagon.film.adapter.postgress.model.DirectorDbo</class>
+    <class>dev.marcgil.hexagon.film.adapter.postgress.model.FilmDbo</class>
+    <class>dev.marcgil.hexagon.film.adapter.postgress.model.ActorDbo</class>
+
+    <!-- Database connection properties -->
+    <properties>
+      <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+
+      <!-- Hibernate properties -->
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="hibernate.hbm2ddl.auto" value="create"/>
+      <property name="hibernate.hbm2ddl.import_files" value="init.sql"/>
+
+      <!-- Connection pool settings -->
+      <property name="hibernate.c3p0.min_size" value="5"/>
+      <property name="hibernate.c3p0.max_size" value="20"/>
+      <property name="hibernate.c3p0.timeout" value="300"/>
+      <property name="hibernate.c3p0.max_statements" value="50"/>
+      <property name="hibernate.c3p0.idle_test_period" value="3000"/>
+    </properties>
+  </persistence-unit>
+</persistence>
