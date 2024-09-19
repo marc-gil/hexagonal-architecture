@@ -39,6 +39,7 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.34</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>dev.marcgil.hexagonal</groupId>
@@ -50,6 +51,18 @@
       <artifactId>film-spring-web-adapter</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
+
+    <!-- TEST -->
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -57,6 +70,11 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.3.1</version>
       </plugin>
     </plugins>
   </build>

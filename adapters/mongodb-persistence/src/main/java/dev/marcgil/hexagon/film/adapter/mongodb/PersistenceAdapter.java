@@ -1,11 +1,13 @@
 package dev.marcgil.hexagon.film.adapter.mongodb;
 
 import dev.marcgil.hexagon.film.adapter.mongodb.model.DirectorDocument;
+import dev.marcgil.hexagon.film.application.port.spi.ActorDao;
 import dev.marcgil.hexagon.film.application.port.spi.DirectorDao;
 import dev.marcgil.hexagon.film.application.port.spi.FilmDao;
 import dev.marcgil.hexagon.film.domain.Director;
 import dev.marcgil.hexagon.film.domain.Film;
 import dev.marcgil.hexagon.film.domain.Film.Genre;
+import dev.marcgil.hexagon.film.domain.Person;
 import java.time.Year;
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class PersistenceAdapter implements DirectorDao, FilmDao {
+public class PersistenceAdapter implements DirectorDao, FilmDao, ActorDao {
 
   private final PersistenceMapper mapper;
   private final DirectorRepository repository;
@@ -43,4 +45,11 @@ public class PersistenceAdapter implements DirectorDao, FilmDao {
         .flatMap(Collection::stream)
         .toList();
   }
+
+  @Override
+  public Optional<Person> findActorByName(String actorName) {
+    return repository.findActorByName(actorName)
+        .map(mapper::toPerson);
+  }
+
 }

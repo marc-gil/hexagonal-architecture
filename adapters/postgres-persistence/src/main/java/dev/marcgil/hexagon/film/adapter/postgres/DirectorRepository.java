@@ -1,6 +1,6 @@
-package dev.marcgil.hexagon.film.adapter.postgress;
+package dev.marcgil.hexagon.film.adapter.postgres;
 
-import dev.marcgil.hexagon.film.adapter.postgress.model.DirectorDbo;
+import dev.marcgil.hexagon.film.adapter.postgres.model.DirectorDbo;
 import dev.marcgil.hexagon.film.domain.Film.Genre;
 import java.time.Year;
 import java.util.List;

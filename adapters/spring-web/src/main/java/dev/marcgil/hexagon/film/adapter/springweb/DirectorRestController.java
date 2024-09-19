@@ -11,6 +11,7 @@ import dev.marcgil.hexagon.film.domain.Director;
 import dev.marcgil.hexagon.film.domain.Film;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,9 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DirectorRestController implements DirectorApi {
 
+  @NonNull
   private final GetFilmsByDirectorUseCase getFilmsByDirectorUseCase;
+  @NonNull
   private final GetDirectorsByNameUseCase getDirectorsByNameUseCase;
+  @NonNull
   private final CreateDirectorUseCase createDirectorUseCase;
+  @NonNull
   private final ApiMapper apiMapper;
 
   @Override
