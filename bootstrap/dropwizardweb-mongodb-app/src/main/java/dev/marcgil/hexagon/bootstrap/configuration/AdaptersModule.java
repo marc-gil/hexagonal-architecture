@@ -11,6 +11,7 @@ import dev.marcgil.hexagon.film.adapter.mongodb.MongoDbDirectorRepository;
 import dev.marcgil.hexagon.film.adapter.mongodb.PersistenceAdapter;
 import dev.marcgil.hexagon.film.adapter.mongodb.PersistenceMapper;
 import dev.marcgil.hexagon.film.adapter.mongodb.PersistenceMapperImpl;
+import dev.marcgil.hexagon.film.application.port.spi.ActorDao;
 import dev.marcgil.hexagon.film.application.port.spi.DirectorDao;
 import dev.marcgil.hexagon.film.application.port.spi.FilmDao;
 import dev.marcgil.hexagon.film.application.service.factory.DirectorFactory;
@@ -32,6 +33,7 @@ public class AdaptersModule extends AbstractModule {
   protected void configure() {
     bind(ApplicationConfiguration.class).toInstance(configuration);
     bind(FilmDao.class).to(PersistenceAdapter.class);
+    bind(ActorDao.class).to(PersistenceAdapter.class);
     bind(DirectorDao.class).to(PersistenceAdapter.class);
   }
 
@@ -43,8 +45,8 @@ public class AdaptersModule extends AbstractModule {
 
   @Provides
   @Singleton
-  DirectorService directorService(DirectorDao directorDao, IdProvider idProvider) {
-    return new DirectorService(directorDao, new FilmFactory(idProvider),
+  DirectorService directorService(DirectorDao directorDao, IdProvider idProvider, ActorDao actorDao) {
+    return new DirectorService(directorDao, new FilmFactory(idProvider, actorDao),
         new DirectorFactory(idProvider));
   }
 

@@ -10,17 +10,22 @@ import dev.marcgil.hexagon.film.domain.Director;
 import dev.marcgil.hexagon.film.domain.Film;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 
 @RequiredArgsConstructor
 public class DirectorService implements AddFilmToDirectorUseCase, GetDirectorsByNameUseCase,
     CreateDirectorUseCase {
 
+  @NonNull
   private final DirectorDao directorDao;
+  @NonNull
   private final FilmFactory filmFactory;
+  @NonNull
   private final DirectorFactory directorFactory;
 
+  @NonNull
   @Override
-  public Director addFilmToDirector(AddFilmToDirectorCommand command) {
+  public Director addFilmToDirector(@NonNull AddFilmToDirectorCommand command) {
     Director director = directorDao.findById(command.directorId())
         .orElseThrow(() -> new IllegalArgumentException(
             "Non existing director with id" + command.directorId()));
@@ -31,13 +36,15 @@ public class DirectorService implements AddFilmToDirectorUseCase, GetDirectorsBy
     return directorDao.save(director);
   }
 
+  @NonNull
   @Override
-  public List<Director> getDirectorsByName(String name) {
+  public List<Director> getDirectorsByName(@NonNull String name) {
     return directorDao.findByName(name);
   }
 
+  @NonNull
   @Override
-  public Director createDirector(CreateDirectorCommand command) {
+  public Director createDirector(@NonNull CreateDirectorCommand command) {
     Director director = directorFactory.create(command);
     return directorDao.save(director);
   }

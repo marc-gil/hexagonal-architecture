@@ -9,12 +9,16 @@ import dev.marcgil.hexagon.film.domain.Director;
 import dev.marcgil.hexagon.film.domain.Film;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 
 @RequiredArgsConstructor
 public class FilmResource implements FilmApi {
 
+  @NonNull
   private final AddFilmToDirectorUseCase addFilmToDirectorUseCase;
+  @NonNull
   private final GetFilmsUseCase getFilmsUseCase;
+  @NonNull
   private final ApiMapper apiMapper;
 
   @Override
@@ -27,8 +31,7 @@ public class FilmResource implements FilmApi {
   }
 
   @Override
-  public List<FilmDto> getFilms(String directorId, String genre,
-      Integer year) {
+  public List<FilmDto> getFilms(String directorId, String genre, Integer year) {
     List<Film> directorsFilms = getFilmsUseCase.getFilms(
         apiMapper.toGetFilmsQuery(directorId, genre, year));
 
