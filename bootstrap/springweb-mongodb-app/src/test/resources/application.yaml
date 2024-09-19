@@ -1,0 +1,3 @@
+spring.data.mongodb:
+  db: hexagonal-architecture
+  uri: mongodb://localhost:${mongodb.container.port}/hexagonal-architecture
