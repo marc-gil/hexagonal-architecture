@@ -1,5 +1,6 @@
-package dev.marcgil.hexagon.film.adapter.postgress.model;
+package dev.marcgil.hexagon.film.adapter.postgres.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,7 +33,7 @@ public class FilmDbo {
       joinColumns = @JoinColumn(name = "film_id"),
       inverseJoinColumns = @JoinColumn(name = "actor_id")
   )
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   private List<ActorDbo> cast;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "director_id", nullable = false)

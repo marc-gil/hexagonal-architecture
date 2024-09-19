@@ -1,4 +1,4 @@
-package dev.marcgil.hexagon.film.adapter.postgress.model;
+package dev.marcgil.hexagon.film.adapter.postgres.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

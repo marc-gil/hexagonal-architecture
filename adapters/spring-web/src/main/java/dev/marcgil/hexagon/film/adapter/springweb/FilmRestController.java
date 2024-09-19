@@ -5,7 +5,6 @@ import dev.marcgil.hexagon.film.adapter.springweb.api.model.FilmDto;
 import dev.marcgil.hexagon.film.application.port.api.AddFilmToDirectorUseCase;
 import dev.marcgil.hexagon.film.application.port.api.AddFilmToDirectorUseCase.AddFilmToDirectorCommand;
 import dev.marcgil.hexagon.film.application.port.api.GetFilmsUseCase;
-import dev.marcgil.hexagon.film.application.port.api.GetFilmsUseCase.GetFilmsQuery;
 import dev.marcgil.hexagon.film.domain.Director;
 import dev.marcgil.hexagon.film.domain.Film;
 import java.util.List;
@@ -31,9 +30,9 @@ public class FilmRestController implements FilmApi {
   }
 
   @Override
-  public ResponseEntity<List<FilmDto>> getFilms(String directorId, String genre,
-      Integer year) {
-    List<Film> directorsFilms = getFilmsUseCase.getFilms(apiMapper.toGetFilmsQuery(directorId, genre, year));
+  public ResponseEntity<List<FilmDto>> getFilms(String directorId, String genre, Integer year) {
+    List<Film> directorsFilms = getFilmsUseCase.getFilms(
+        apiMapper.toGetFilmsQuery(directorId, genre, year));
 
     return ResponseEntity.ok(apiMapper.toFilmDtoList(directorsFilms));
   }
