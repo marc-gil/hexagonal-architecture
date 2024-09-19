@@ -1,11 +1,11 @@
-package dev.marcgil.hexagon.film.adapter.postgress;
+package dev.marcgil.hexagon.film.adapter.postgres;
 
-import dev.marcgil.hexagon.film.adapter.postgress.model.DirectorDbo;
-import dev.marcgil.hexagon.film.adapter.postgress.model.FilmDbo;
+import dev.marcgil.hexagon.film.adapter.postgres.model.DirectorDbo;
+import dev.marcgil.hexagon.film.adapter.postgres.model.FilmDbo;
 import dev.marcgil.hexagon.film.domain.Film.Genre;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
@@ -15,15 +15,14 @@ import jakarta.persistence.criteria.Root;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.jspecify.annotations.NonNull;
 
 @RequiredArgsConstructor
-public class PostgressDirectorRepository implements DirectorRepository {
+public class PostgresDirectorRepository implements DirectorRepository {
 
   @NonNull
-  @PersistenceContext
   private final EntityManagerFactory entityManagerFactory;
 
   @Override
@@ -37,7 +36,10 @@ public class PostgressDirectorRepository implements DirectorRepository {
   @Override
   public DirectorDbo save(DirectorDbo director) {
     try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-      entityManager.persist(director);
+      EntityTransaction transaction = entityManager.getTransaction();
+      transaction.begin();
+      entityManager.merge(director);
+      transaction.commit();
       return director;
     }
   }

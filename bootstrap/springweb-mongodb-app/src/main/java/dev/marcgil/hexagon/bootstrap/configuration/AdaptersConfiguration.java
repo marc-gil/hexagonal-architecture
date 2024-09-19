@@ -6,6 +6,7 @@ import dev.marcgil.hexagon.film.adapter.mongodb.DirectorRepository;
 import dev.marcgil.hexagon.film.adapter.mongodb.MongoDbDirectorRepository;
 import dev.marcgil.hexagon.film.adapter.mongodb.PersistenceMapper;
 import dev.marcgil.hexagon.film.adapter.mongodb.PersistenceMapperImpl;
+import dev.marcgil.hexagon.film.application.port.spi.ActorDao;
 import dev.marcgil.hexagon.film.application.port.spi.DirectorDao;
 import dev.marcgil.hexagon.film.application.port.spi.FilmDao;
 import dev.marcgil.hexagon.film.application.service.factory.DirectorFactory;
@@ -32,8 +33,9 @@ public class AdaptersConfiguration {
   }
 
   @Bean
-  DirectorService directorService(DirectorDao directorDao, IdProvider idProvider) {
-    return new DirectorService(directorDao, new FilmFactory(idProvider),
+  DirectorService directorService(DirectorDao directorDao, IdProvider idProvider,
+      ActorDao actorDao) {
+    return new DirectorService(directorDao, new FilmFactory(idProvider, actorDao),
         new DirectorFactory(idProvider));
   }
 
@@ -56,6 +58,5 @@ public class AdaptersConfiguration {
   DirectorRepository directorRepository(MongoClient mongoClient) {
     return new MongoDbDirectorRepository(mongoClient, dbName);
   }
-
 
 }

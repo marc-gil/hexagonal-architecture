@@ -9,9 +9,9 @@
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
     <!-- JPA entity classes -->
-    <class>dev.marcgil.hexagon.film.adapter.postgress.model.DirectorDbo</class>
-    <class>dev.marcgil.hexagon.film.adapter.postgress.model.FilmDbo</class>
-    <class>dev.marcgil.hexagon.film.adapter.postgress.model.ActorDbo</class>
+    <class>dev.marcgil.hexagon.film.adapter.postgres.model.DirectorDbo</class>
+    <class>dev.marcgil.hexagon.film.adapter.postgres.model.FilmDbo</class>
+    <class>dev.marcgil.hexagon.film.adapter.postgres.model.ActorDbo</class>
 
     <!-- Database connection properties -->
     <properties>
