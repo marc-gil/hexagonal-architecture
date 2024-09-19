@@ -1,10 +1,13 @@
 package dev.marcgil.hexagon.bootstrap.configuration;
 
-import dev.marcgil.hexagon.film.adapter.postgress.DirectorRepository;
-import dev.marcgil.hexagon.film.adapter.postgress.PersistenceAdapter;
-import dev.marcgil.hexagon.film.adapter.postgress.PersistenceMapper;
-import dev.marcgil.hexagon.film.adapter.postgress.PersistenceMapperImpl;
-import dev.marcgil.hexagon.film.adapter.postgress.PostgressDirectorRepository;
+import dev.marcgil.hexagon.film.adapter.postgres.ActorRepository;
+import dev.marcgil.hexagon.film.adapter.postgres.DirectorRepository;
+import dev.marcgil.hexagon.film.adapter.postgres.PersistenceAdapter;
+import dev.marcgil.hexagon.film.adapter.postgres.PersistenceMapper;
+import dev.marcgil.hexagon.film.adapter.postgres.PersistenceMapperImpl;
+import dev.marcgil.hexagon.film.adapter.postgres.PostgresActorRepository;
+import dev.marcgil.hexagon.film.adapter.postgres.PostgresDirectorRepository;
+import dev.marcgil.hexagon.film.application.port.spi.ActorDao;
 import dev.marcgil.hexagon.film.application.port.spi.DirectorDao;
 import dev.marcgil.hexagon.film.application.port.spi.FilmDao;
 import dev.marcgil.hexagon.film.application.service.factory.DirectorFactory;
@@ -28,8 +31,9 @@ public class AdaptersConfiguration {
   }
 
   @Bean
-  DirectorService directorService(DirectorDao directorDao, IdProvider idProvider) {
-    return new DirectorService(directorDao, new FilmFactory(idProvider),
+  DirectorService directorService(DirectorDao directorDao, IdProvider idProvider,
+      ActorDao actorDao) {
+    return new DirectorService(directorDao, new FilmFactory(idProvider, actorDao),
         new DirectorFactory(idProvider));
   }
 
@@ -39,8 +43,9 @@ public class AdaptersConfiguration {
   }
 
   @Bean
-  DirectorDao directorDao(PersistenceMapper mapper, DirectorRepository repository) {
-    return new PersistenceAdapter(mapper, repository);
+  DirectorDao directorDao(PersistenceMapper mapper, DirectorRepository repository,
+      ActorRepository actorRepository) {
+    return new PersistenceAdapter(mapper, repository, actorRepository);
   }
 
   @Bean
@@ -50,7 +55,12 @@ public class AdaptersConfiguration {
 
   @Bean
   DirectorRepository directorRepository(EntityManagerFactory entityManagerFactory) {
-    return new PostgressDirectorRepository(entityManagerFactory);
+    return new PostgresDirectorRepository(entityManagerFactory);
+  }
+
+  @Bean
+  ActorRepository actorRepository(EntityManagerFactory entityManagerFactory) {
+    return new PostgresActorRepository(entityManagerFactory);
   }
 
 }
