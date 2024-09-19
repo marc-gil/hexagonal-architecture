@@ -7,7 +7,9 @@ import static com.mongodb.client.model.mql.MqlValues.current;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.mql.MqlArray;
 import com.mongodb.client.model.mql.MqlBoolean;
 import com.mongodb.client.model.mql.MqlDocument;
@@ -15,13 +17,13 @@ import com.mongodb.client.model.mql.MqlInteger;
 import com.mongodb.client.model.mql.MqlString;
 import com.mongodb.client.model.mql.MqlValues;
 import dev.marcgil.hexagon.film.adapter.mongodb.model.DirectorDocument;
+import dev.marcgil.hexagon.film.adapter.mongodb.model.PersonDocument;
 import dev.marcgil.hexagon.film.domain.Film.Genre;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.bson.Document;
 import org.bson.conversions.Bson;
 
 public class MongoDbDirectorRepository implements DirectorRepository {
@@ -40,7 +42,11 @@ public class MongoDbDirectorRepository implements DirectorRepository {
 
   @Override
   public DirectorDocument save(DirectorDocument director) {
-    collection.insertOne(director);
+    Bson findByIdFilter = Filters.eq("_id", director.getId());
+
+    collection.replaceOne(findByIdFilter, director,
+        new ReplaceOptions().upsert(true));
+
     return director;
   }
 
@@ -57,15 +63,6 @@ public class MongoDbDirectorRepository implements DirectorRepository {
     }
     MqlArray<MqlDocument> films = current().getArray("films");
     if (genre != null || yearOfRecording != null) {
-      /*Bson projectStage = Aggregates.project(Projections.fields(
-          Projections.include("name", "birthDate"),
-          Projections.computed("films",
-              new Document("$filter", new Document("input", "$films")
-                  .append("as", "film")
-                  .append("cond", new Document("$and", buildProjectionFilter(genre, yearOfRecording))))
-              )
-          )
-      );*/
       Bson projectStage = Aggregates.project(
           Projections.fields(
               Projections.include("name", "birthDate"),
@@ -89,22 +86,24 @@ public class MongoDbDirectorRepository implements DirectorRepository {
               )
           )
       );
-
       aggregate.add(projectStage);
     }
-
     return new ArrayList<>(collection.aggregate(aggregate).into(new ArrayList<>()));
   }
 
-  private List<Document> buildProjectionFilter(Genre genre, Year yearOfRecording) {
-    List<Document> projectionFilter = new ArrayList<>();
-    if (genre != null) {
-      projectionFilter.add(new Document("$in", List.of(genre.name(), "$$film.genres")));
-    }
-    if (yearOfRecording != null) {
-      projectionFilter.add(new Document("$eq", List.of("$$film.year", yearOfRecording.getValue())));
-    }
-    return projectionFilter;
+  @Override
+  public Optional<PersonDocument> findActorByName(String actorName) {
+    List<Bson> aggregationPipeline = List.of(
+        Aggregates.unwind("$films"),
+        Aggregates.unwind("$films.cast"),
+        Aggregates.match(eq("films.cast.name", actorName)),
+        Aggregates.project(Projections.fields(
+            Projections.excludeId(),
+            Projections.computed("id", "$films.cast.id"),
+            Projections.computed("name", "$films.cast.name")
+        )));
+    return Optional.ofNullable(
+        collection.withDocumentClass(PersonDocument.class).aggregate(aggregationPipeline).first());
   }
 
 }
