@@ -18,7 +18,10 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 @RequiredArgsConstructor
 public class PostgresDirectorRepository implements DirectorRepository {
 
@@ -58,7 +61,8 @@ public class PostgresDirectorRepository implements DirectorRepository {
   }
 
   @Override
-  public List<DirectorDbo> findBy(String directorId, Genre genre, Year yearOfRecording) {
+  public List<DirectorDbo> findBy(@Nullable String directorId, @Nullable Genre genre,
+      @Nullable Year yearOfRecording) {
     try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
       CriteriaBuilder cb = entityManager.getCriteriaBuilder();
       CriteriaQuery<DirectorDbo> query = cb.createQuery(DirectorDbo.class);

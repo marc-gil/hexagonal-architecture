@@ -10,7 +10,9 @@ import jakarta.persistence.criteria.Root;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @RequiredArgsConstructor
 public class PostgresActorRepository implements ActorRepository {
 

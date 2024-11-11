@@ -52,7 +52,7 @@ class FilmRestControllerIT extends AbstractIntegrationTest {
   }
 
   @Test
-  void createFilm_validFilmDto_filmIsAddedToTheDirector() throws Exception {
+  void createFilm_validFilmDto_filmIsAddedToTheDirector() {
     Client client = EXTENDED_APPLICATION.client();
     List<FilmDocument> initiallyStoredFilms = directorRepository.findById(
             "8abd01c4-2a37-417d-bde2-6591948f5786")

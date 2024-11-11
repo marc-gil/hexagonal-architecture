@@ -11,14 +11,19 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @Getter
+@NullMarked
 @SuperBuilder(toBuilder = true)
 public class Director extends Person {
 
   @Setter
+  @NonNull
   @Builder.Default
   List<Film> directedFilms = List.of();
 
@@ -28,6 +33,7 @@ public class Director extends Person {
     this.directedFilms = Collections.unmodifiableList(films);
   }
 
+  @Nullable
   public Genre getPrefferedGenre() {
     return this.directedFilms.stream()
         .map(Film::getGenres)

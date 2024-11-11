@@ -9,7 +9,10 @@ import dev.marcgil.hexagon.film.domain.Film;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 @RequiredArgsConstructor
 public class FilmService implements GetFilmsByDirectorUseCase, GetFilmsUseCase {
 
@@ -18,20 +21,20 @@ public class FilmService implements GetFilmsByDirectorUseCase, GetFilmsUseCase {
   @NonNull
   private final FilmDao filmDao;
 
-  @NonNull
   @Override
-  public List<Film> getFilmsByDirector(@NonNull String directorId) {
+  public List<Film> getFilmsByDirector(String directorId) {
     return directorDao.findById(directorId)
         .map(Director::getDirectedFilms)
         .orElseThrow(
             () -> new IllegalArgumentException("Non existing director with id " + directorId));
   }
 
-  @NonNull
   @Override
-  public List<Film> getFilms(GetFilmsQuery query) {
-    if (query == null || query.directorId() == null && query.yearOfRecording() == null && query.genre() == null) {
-      throw new IllegalArgumentException("At least one criteria must be specified to retrieve the films");
+  public List<Film> getFilms(@Nullable GetFilmsQuery query) {
+    if (query == null
+        || query.directorId() == null && query.yearOfRecording() == null && query.genre() == null) {
+      throw new IllegalArgumentException(
+          "At least one criteria must be specified to retrieve the films");
     }
     return filmDao.findBy(query.directorId(), query.genre(), query.yearOfRecording());
   }

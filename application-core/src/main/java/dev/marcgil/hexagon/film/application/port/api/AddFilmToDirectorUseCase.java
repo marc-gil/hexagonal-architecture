@@ -5,30 +5,33 @@ import dev.marcgil.hexagon.film.domain.Film.Genre;
 import java.time.Duration;
 import java.time.Year;
 import java.util.List;
-import org.jspecify.annotations.NonNull;
+import lombok.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public interface AddFilmToDirectorUseCase {
 
-  @NonNull
-  Director addFilmToDirector(@NonNull AddFilmToDirectorCommand command);
+  Director addFilmToDirector(AddFilmToDirectorCommand command);
 
   record AddFilmToDirectorCommand(
-      @lombok.NonNull
+      @NonNull
       String directorId,
-      @lombok.NonNull
+      @NonNull
       FilmCharacteristics filmCharacteristics) {
 
   }
 
   record FilmCharacteristics(
-      @lombok.NonNull
+      @NonNull
       Year yearOfRecording,
-      @lombok.NonNull
+      @NonNull
       String originalTitle,
-      @lombok.NonNull
+      @NonNull
       Duration duration,
-      @lombok.NonNull
+      @NonNull
       List<Genre> genres,
+      @Nullable
       List<String> cast) {
 
   }

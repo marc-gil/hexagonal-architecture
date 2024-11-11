@@ -2,11 +2,11 @@ package dev.marcgil.hexagon.film.application.port.api;
 
 import dev.marcgil.hexagon.film.domain.Film;
 import java.util.List;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public interface GetFilmsByDirectorUseCase {
 
-  @NonNull
-  List<Film> getFilmsByDirector(@NonNull String directorId);
+  List<Film> getFilmsByDirector(String directorId);
 
 }

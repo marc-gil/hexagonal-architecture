@@ -25,7 +25,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.bson.conversions.Bson;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class MongoDbDirectorRepository implements DirectorRepository {
 
   private final MongoCollection<DirectorDocument> collection;
@@ -56,7 +59,8 @@ public class MongoDbDirectorRepository implements DirectorRepository {
   }
 
   @Override
-  public List<DirectorDocument> findBy(String directorId, Genre genre, Year yearOfRecording) {
+  public List<DirectorDocument> findBy(@Nullable String directorId, @Nullable Genre genre,
+      @Nullable Year yearOfRecording) {
     List<Bson> aggregate = new ArrayList<>();
     if (directorId != null) {
       aggregate.add(Aggregates.match(eq("_id", directorId)));
