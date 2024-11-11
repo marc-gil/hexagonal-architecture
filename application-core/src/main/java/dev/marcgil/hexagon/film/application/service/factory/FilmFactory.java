@@ -8,9 +8,12 @@ import dev.marcgil.hexagon.film.domain.Film.FilmBuilder;
 import dev.marcgil.hexagon.film.domain.Person;
 import java.util.List;
 import java.util.Objects;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 @RequiredArgsConstructor
 public class FilmFactory {
 
@@ -19,8 +22,7 @@ public class FilmFactory {
   @NonNull
   private final ActorDao actorDao;
 
-  @NonNull
-  public Film create(@NonNull FilmCharacteristics filmCharacteristics, @NonNull Director director) {
+  public Film create(FilmCharacteristics filmCharacteristics, Director director) {
     FilmBuilder filmBuilder = Film.builder()
         .id(idProvider.newId())
         .director(director)
@@ -39,7 +41,8 @@ public class FilmFactory {
     return filmBuilder.build();
   }
 
-  private Person buildPerson(String name) {
+  @Nullable
+  private Person buildPerson(@Nullable String name) {
     if (name == null) {
       return null;
     }

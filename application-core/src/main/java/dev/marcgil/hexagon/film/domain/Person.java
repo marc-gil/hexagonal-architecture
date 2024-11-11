@@ -5,8 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @Getter
+@NullMarked
 @EqualsAndHashCode
 @SuperBuilder(toBuilder = true)
 public class Person {
@@ -15,6 +18,7 @@ public class Person {
   protected String id;
   @NonNull
   protected String name;
+  @Nullable
   protected LocalDate birthDate;
 
 }

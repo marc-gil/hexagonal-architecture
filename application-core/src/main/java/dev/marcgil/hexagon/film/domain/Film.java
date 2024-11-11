@@ -6,8 +6,10 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.jspecify.annotations.NullMarked;
 
 @Value
+@NullMarked
 @Builder(toBuilder = true)
 public class Film {
 

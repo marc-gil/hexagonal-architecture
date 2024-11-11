@@ -13,7 +13,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 @RequiredArgsConstructor
 public class PersistenceAdapter implements DirectorDao, FilmDao, ActorDao {
 
@@ -38,7 +41,8 @@ public class PersistenceAdapter implements DirectorDao, FilmDao, ActorDao {
   }
 
   @Override
-  public List<Film> findBy(String directorId, Genre genre, Year year) {
+  public List<Film> findBy(@Nullable String directorId, @Nullable Genre genre,
+      @Nullable Year year) {
     return repository.findBy(directorId, genre, year).stream()
         .map(mapper::toDirector)
         .map(Director::getDirectedFilms)
