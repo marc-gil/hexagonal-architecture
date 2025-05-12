@@ -1,2 +1,3 @@
 spring.data.mongodb:
   db: hexagonal-architecture
+springdoc.apidocs.version: OPENAPI_3_0
