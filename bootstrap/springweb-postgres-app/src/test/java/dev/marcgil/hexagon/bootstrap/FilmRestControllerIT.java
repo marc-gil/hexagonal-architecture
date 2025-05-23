@@ -55,6 +55,31 @@ class FilmRestControllerIT extends AbstractIntegrationTest {
   }
 
   @Test
+  void getFilms_genreThriller_origenAndShutterIsland() throws Exception {
+    MvcResult mvcResult = mockMvc.perform(get("/films").queryParam("genre", "THRILLER"))
+        .andExpectAll(status().isOk(), content().contentType(MediaType.APPLICATION_JSON))
+        .andReturn();
+
+    FilmDto[] films = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
+        FilmDto[].class);
+
+    assertThat(films).isNotEmpty()
+        .hasSize(2)
+        .containsExactlyInAnyOrder(new FilmDto().directorId("8abd01c4-2a37-417d-bde2-6591948f5786")
+                .title("Shutter Island")
+                .year(2010)
+                .duration("PT2H18M")
+                .genres(List.of(GenreDto.THRILLER))
+                .cast(List.of("Leonardo DiCaprio", "Mark Ruffalo", "Ben Kingsley")),
+            new FilmDto().directorId("3d704cf2-3490-4529-8989-b4176a49250d")
+                .title("Origen")
+                .year(2010)
+                .duration("PT2H28M")
+                .genres(List.of(GenreDto.THRILLER))
+                .cast(List.of("Leonardo DiCaprio", "Joseph Gordon-Levitt", "Marion Cotillard")));
+  }
+
+  @Test
   void createFilm_validFilmDto_filmIsAddedToTheDirector() throws Exception {
     List<FilmDbo> initiallyStoredFilms = directorRepository.findById(
             "8abd01c4-2a37-417d-bde2-6591948f5786")
