@@ -1,19 +1,19 @@
 package dev.marcgil.hexagon.film.adapter.postgres;
 
 import dev.marcgil.hexagon.film.adapter.postgres.model.DirectorDbo;
-import dev.marcgil.hexagon.film.adapter.postgres.model.FilmDbo;
 import dev.marcgil.hexagon.film.domain.Film.Genre;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.time.Year;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -61,32 +61,32 @@ public class PostgresDirectorRepository implements DirectorRepository {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public List<DirectorDbo> findBy(@Nullable String directorId, @Nullable Genre genre,
       @Nullable Year yearOfRecording) {
     try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-      CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-      CriteriaQuery<DirectorDbo> query = cb.createQuery(DirectorDbo.class);
-      Root<DirectorDbo> director = query.from(DirectorDbo.class);
-
-      Join<DirectorDbo, FilmDbo> films = director.join("films", JoinType.LEFT);
-
-      Predicate predicate = cb.conjunction();
+      StringBuilder sql = new StringBuilder(
+          "SELECT DISTINCT d.* FROM directors d JOIN films f ON d.id = f.director_id WHERE 1=1");
+      Map<String, Object> params = new HashMap<>();
 
       if (directorId != null) {
-        predicate = cb.and(predicate, cb.equal(director.get("id"), directorId));
+        sql.append(" AND d.id = :directorId");
+        params.put("directorId", directorId);
       }
 
       if (genre != null) {
-        predicate = cb.and(predicate, cb.isMember(genre.name(), films.get("genres")));
+        sql.append(" AND ARRAY_POSITION(f.genres, :genre) IS NOT NULL");
+        params.put("genre", genre.name());
       }
 
       if (yearOfRecording != null) {
-        predicate = cb.and(predicate, cb.equal(films.get("year"), yearOfRecording.getValue()));
+        sql.append(" AND f.year = :year");
+        params.put("year", yearOfRecording.getValue());
       }
 
-      query.where(predicate);
-      query.distinct(true);  // To avoid duplicate directors in the result
-      return entityManager.createQuery(query).getResultList();
+      Query query = entityManager.createNativeQuery(sql.toString(), DirectorDbo.class);
+      params.forEach(query::setParameter);
+      return query.getResultList();
     }
   }
 
