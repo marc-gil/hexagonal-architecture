@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.hibernate.orm</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>7.0.2.Final</version>
+      <version>7.0.3.Final</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
