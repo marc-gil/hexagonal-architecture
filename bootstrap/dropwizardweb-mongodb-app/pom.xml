@@ -14,6 +14,18 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-bom</artifactId>
+        <version>5.0.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>com.google.inject</groupId>
@@ -66,7 +78,6 @@
     <dependency>
       <groupId>io.dropwizard</groupId>
       <artifactId>dropwizard-testing</artifactId>
-      <version>4.0.16</version>
       <scope>test</scope>
     </dependency>
     <dependency>
