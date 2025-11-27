@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
 import org.springframework.test.context.MergedContextConfiguration;
 import org.springframework.test.context.TestContextAnnotationUtils;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 public class EnablePostgresTestContainerContextCustomerFactory implements ContextCustomizerFactory {
@@ -47,7 +47,7 @@ public class EnablePostgresTestContainerContextCustomerFactory implements Contex
     @Override
     public void customizeContext(@NonNull ConfigurableApplicationContext context,
         @NonNull MergedContextConfiguration mergedConfig) {
-      PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>(POSTGRES_IMAGE)
+      PostgreSQLContainer postgresContainer = new PostgreSQLContainer(POSTGRES_IMAGE)
           .withDatabaseName("hexagonal-architecture")
           .withUsername("root")
           .withPassword("example");
