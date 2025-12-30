@@ -74,7 +74,7 @@ public class FilmDropwizardApplication extends Application<ApplicationConfigurat
         .prettyPrint(true)
         .resourcePackages(Set.of("dev.marcgil.hexagon.film.adapter.dropwizard"));
 
-    environment.getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    environment.getObjectMapper().setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
 
     environment.jersey().register(new OpenApiResource().openApiConfiguration(oasConfig));
   }
